@@ -1,0 +1,41 @@
+x <- 2*2*3^4/5
+y <- 5/2
+z <- 6 % 4
+y <- x+y-z
+r <- 3^3^5
+x2 <- 2.5*2.5*3.5^4/5.5
+y2 <- 5.5/2
+z2 <- 6.5 % 4
+y2 <- x+y-z
+r2 <- 3^3^5
+t <- 0.0
+# коментар
+for (x in 1:9) {
+if (x==2) {
+ continue
+}
+elseif (x<5) {
+	cat(r2)
+} 
+elseif (x>6) {
+	cat(z2)
+} 
+elseif (x==7) {
+break
+		}
+		else
+			r2 <- readline
+		if (FALSE) {
+	t<-999 
+}
+elseif (FALSE > TRUE) {
+	t <- -999
+}
+elseif (5.1 >5) {
+	t <- t+1
+}
+cat(t, x)
+}
+If (5>=5.0){
+		If (5<=5.0) {
+

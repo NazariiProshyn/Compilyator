@@ -2,7 +2,7 @@
 #include "Compiler.h"
 int main()
 {
-	std::string nameOfFile{"LR.txt"};
+	std::string nameOfFile{"LR1.txt"};
 	//std::cout << "Filename to compile: ";
 	//std::cin >> nameOfFile;
 	Compiler compiler(nameOfFile);

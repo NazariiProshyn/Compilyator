@@ -37,6 +37,7 @@ bool Compiler::LexicalAnalisator()
 	std::cout << "Text in File:\n";
 	while (std::getline(infoFile, dataString)) {
 		++numOfLine;
+		lexicalState = 0;
 		//std::cout << dataString << std::endl;
 		for (size_t i = 0; i < dataString.size(); ++i)
 		{

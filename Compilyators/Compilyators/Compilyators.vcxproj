@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d05a3f13-f6bc-4b5e-94bd-06625040ddca}</ProjectGuid>
+    <ProjectGuid>{07a9d9b2-04da-495f-9c1d-bd075a037d95}</ProjectGuid>
     <RootNamespace>Compilyators</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -127,7 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="Compilyators.cpp" />
+    <ClCompile Include="Symbols.cpp" />
+    <ClCompile Include="Tables.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Compiler.h" />
+    <ClInclude Include="Symbols.h" />
+    <ClInclude Include="Tables.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,5 +18,25 @@
     <ClCompile Include="Compilyators.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Symbols.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Compiler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Symbols.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

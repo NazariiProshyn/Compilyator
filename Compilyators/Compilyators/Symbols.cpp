@@ -50,7 +50,11 @@ namespace NMSymbols {
 		{"rel_op","=="},
 		{"rel_op","!="},
 		{"brackets_op","("},
+		{"brackets_op","(("},
+		{"brackets_op","((("},
 		{"brackets_op",")"},
+		{"brackets_op","))"},
+		{"brackets_op",")))"},
 		{"punct","."},
 		{"punct",","},
 		{"punct",":"},
@@ -58,6 +62,8 @@ namespace NMSymbols {
 		{"eol","/n"},
 		{"block_op","{"},
 		{"block_op","}"},
+		{"block_op","}("},
+		{"block_op","){"},
 		{"if_op","if"},
 		{"if_op","elseif"},
 		{"if_op","else"}
@@ -72,6 +78,10 @@ namespace NMSymbols {
 
 std::string Symbols::typeOfSymbol(std::string info)
 {
+	if (static_cast<int>(info[0]) == 9) {
+		return "WhiteSpace";
+	}
+
 	for (size_t i = 0; i < NMSymbols::Letters.size(); ++i)
 	{
 		if (info == NMSymbols::Letters[i])

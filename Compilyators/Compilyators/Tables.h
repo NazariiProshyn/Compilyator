@@ -49,10 +49,11 @@ public:
 	void printTableOfConst();
 	void printTableOfSymb();
 
+	std::vector<TableOfSymb> tableOfSymb;
 private:
 	std::vector<TableOfId> tableOfId;
 	std::vector<TableOfConst> tableOfConst;
-	std::vector<TableOfSymb> tableOfSymb;
+	
 
 	TableOfId idT;
 	TableOfConst constT;

@@ -29,12 +29,18 @@ private:
 	bool checkToken(std::string token);
 	bool checkTokenWithoutExc(std::string token);
 	bool checkValueWithoutExc(std::string token, std::string value);
+	bool checkTokenAndValueWithoutExp(std::string token, std::string value);
+
 	void identParingList();
 	void identRecParingList();
 	void identExpresion();
-	bool identBoolean();
-	bool identArithm();
+	void identExp();
+	void assExp();
+	void opScope();
+	void clScope();
+	void relExp();
 	void identIfExp();
 	void identKeyWExp();
+	int ops{ 0 };
 };
 

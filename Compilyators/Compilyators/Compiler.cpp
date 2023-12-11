@@ -1,6 +1,7 @@
 #include "Compiler.h"
 #include <sstream>
-namespace NMLexicalErrors{
+
+namespace NMLexicalErrors {
 	std::string fileOpenError{ "ERROR CANNOT OPEN FILE: " };
 	std::string unkownSymbol{ "Unknown symbol: " };
 	std::string unkownOperator{ "Unknown operator: " };
@@ -20,17 +21,17 @@ Compiler::~Compiler()
 
 bool Compiler::LexicalAnalisator()
 {
-	if(!infoFile.is_open()){
+	if (!infoFile.is_open()) {
 		std::cout << std::endl << NMLexicalErrors::fileOpenError
 			<< nameOfFile << std::endl;
 		return false;
 	}
 
-	std::string dataString{""};
+	std::string dataString{ "" };
 	std::string activeString{ "" };
 	std::string typeOfSymbol{ "" };
 	std::string activeChar{ "" };
-	int lexicalState{0};
+	int lexicalState{ 0 };
 	bool checkedChar = false;
 	int numOfLine = 0;
 
@@ -44,7 +45,7 @@ bool Compiler::LexicalAnalisator()
 
 			if (!checkedChar && lexicalState == 0)
 			{
-				
+
 				activeChar = dataString[i];
 				typeOfSymbol = symbols.typeOfSymbol(activeChar);
 
@@ -213,7 +214,7 @@ bool Compiler::LexicalAnalisator()
 							<< activeString << NMLexicalErrors::onLine << numOfLine << std::endl;
 						return false;
 					}
-					
+
 
 				}
 			}
@@ -262,7 +263,7 @@ void Compiler::prinTables()
 
 bool Compiler::SyntaxAnalisator()
 {
-	
+
 	try
 	{
 		identParingList();
@@ -278,14 +279,14 @@ bool Compiler::SyntaxAnalisator()
 void Compiler::identWord(std::string info, int line)
 {
 	std::string tempString = symbols.typeOfIdentificator(info);
-	if(tempString == "None") {
+	if (tempString == "None") {
 		tables.addTableOfId(info, line, "ident");
 	}
 	else
 	{
 		tables.addTableOfSymb(info, line, tempString);
 	}
-	
+
 }
 
 bool Compiler::identOperator(std::string info, int line)
@@ -303,7 +304,9 @@ bool Compiler::identOperator(std::string info, int line)
 
 bool Compiler::checkTokenAndValue(std::string token, std::string value)
 {
+
 	++activeLineOfSymbTable;
+
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size()) {
 		std::string error = " Unexpected end of programm: Out of range table of Symbols\n Expected: (";
 		error += token + ", " + value + ")";
@@ -311,7 +314,7 @@ bool Compiler::checkTokenAndValue(std::string token, std::string value)
 		return false;
 	}
 	if (token != tables.tableOfSymb[activeLineOfSymbTable].token ||
-		value!= tables.tableOfSymb[activeLineOfSymbTable].value) {
+		value != tables.tableOfSymb[activeLineOfSymbTable].value) {
 		std::string error = "In line: ";
 		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
 		error += "\nExpected: (" + token + ", " + value + ")";
@@ -321,8 +324,6 @@ bool Compiler::checkTokenAndValue(std::string token, std::string value)
 
 
 	}
-	std::cout << "Check Token. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	return true;
 }
 
@@ -343,10 +344,8 @@ bool Compiler::checkToken(std::string token)
 		throw std::runtime_error(error);
 		return false;
 
-		
+
 	}
-	std::cout << "Check Token. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	return true;
 }
 
@@ -361,8 +360,6 @@ bool Compiler::checkTokenWithoutExc(std::string token)
 	if (token != tables.tableOfSymb[activeLineOfSymbTable].token) {
 		return false;
 	}
-	std::cout << "Check Token. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	return true;
 }
 
@@ -377,8 +374,23 @@ bool Compiler::checkValueWithoutExc(std::string token, std::string value)
 	if (value != tables.tableOfSymb[activeLineOfSymbTable].value) {
 		return false;
 	}
-	std::cout << "Check Token. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
+	return true;
+}
+
+bool Compiler::checkTokenAndValueWithoutExp(std::string token, std::string value)
+{
+
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size()) {
+		std::string error = " Unexpected end of programm: Out of range table of Symbols\n Expected: (";
+		error += token + ", " + value + ")";
+		throw std::runtime_error(error);
+		return false;
+	}
+	if (token != tables.tableOfSymb[activeLineOfSymbTable].token ||
+		value != tables.tableOfSymb[activeLineOfSymbTable].value) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -388,10 +400,11 @@ void Compiler::identParingList()
 	{
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
-			std::cout << "Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
-
+			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			identExpresion();
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "if_op")
@@ -399,7 +412,7 @@ void Compiler::identParingList()
 			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			identIfExp();
-			
+
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "keyword")
 		{
@@ -416,7 +429,7 @@ void Compiler::identParingList()
 			throw std::runtime_error(error);
 		}
 
-		
+
 		//keyword
 	}
 }
@@ -460,131 +473,328 @@ void Compiler::identRecParingList()
 			throw std::runtime_error(error);
 		}
 
-		
+
 		//keyword
 	}
 }
 
 void Compiler::identExpresion()
 {
-	
+	std::cout << "\nStart identifacation expression\n";
 	++activeLineOfSymbTable;
-	if (checkTokenWithoutExc("add_op"))
+	if (checkTokenWithoutExc("add_op")) {
+		assExp();
+	}
+	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		identExp();
+	}
+	else if(checkTokenAndValueWithoutExp("brackets_op", "("))
 	{
+		++ops;
+		opScope();
+	}
+	else if (checkTokenAndValueWithoutExp("keyword", "readline")) {
+		std::cout << "\nCheck keyword: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 		++activeLineOfSymbTable;
 	}
-	if (!identBoolean()) {//
-		if (!identArithm())
+	else
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected identificator expression: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+
+}
+
+
+
+void Compiler::identExp()
+{
+	std::cout << "\nCheck ident or value: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	++activeLineOfSymbTable;
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	{
+		if (ops != 0)
 		{
 			std::string error = "In line: ";
 			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
-			error += "\nUnexpected identificator expression: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+		std::cout << "\nSuccess: identArithm\n\n";
+	}
+	else if (checkTokenWithoutExc("add_op") || checkTokenWithoutExc("mult_op") || checkTokenWithoutExc("exp_op") || checkTokenWithoutExc("boolval")) {
+		assExp();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
+	{
+		++ops;
+		opScope();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", ")"))
+	{
+		if (ops > 0) {
+			--ops;
+			clScope();
+		}
+	}
+	else if (checkTokenWithoutExc("rel_op"))
+	{
+		relExp();
+	}
+	else {
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
 			throw std::runtime_error(error);
 		}
 	}
-
 }
 
-bool Compiler::identBoolean()
+void Compiler::assExp()
 {
-	std::cout << "\nStart: identBoolean\n";
-	int temp = activeLineOfSymbTable;
-	if (checkTokenWithoutExc("boolval")) {
-		++activeLineOfSymbTable;
-		std::cout << "\n\Success: identBoolean\n\n";
-		return true;
-	}
-	//x <- 5+x>=y
-	while (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float")) {
-		if (activeLineOfSymbTable >= tables.tableOfSymb.size() - 1)
+	std::cout << "\nCheck operators: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	++activeLineOfSymbTable;
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	{
+		if (ops != 0)
 		{
-			std::cout << "False: identBoolean\n\n";
-			activeLineOfSymbTable = temp;
-			return false;
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
 		}
-		++activeLineOfSymbTable;
-		if (!checkTokenWithoutExc("add_op") && !checkTokenWithoutExc("mult_op") && !checkTokenWithoutExc("exp_op")) {
-
-			if (!checkTokenWithoutExc("rel_op")) {
-				std::cout << "False: identBoolean\n\n";
-				activeLineOfSymbTable = temp;
-				return false;
-			}
-			else
-			{
-				++activeLineOfSymbTable;
-				break;
-			}
-		}
-		++activeLineOfSymbTable;
+		std::cout << "\nSuccess: identArithm\n\n";
 	}
-
-
-
-	while (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float")) {
-		++activeLineOfSymbTable;
-		if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	else if (checkTokenWithoutExc("add_op") || checkTokenWithoutExc("mult_op") || checkTokenWithoutExc("exp_op") || checkTokenWithoutExc("boolval")) {
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float")) {
+		identExp();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
+	{
+		++ops;
+		opScope();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", ")"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else if (checkTokenWithoutExc("rel_op"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else {
+		if (ops != 0)
 		{
-			std::cout << "Success: identBoolean\n\n";
-			return true;
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
 		}
-		if (!checkTokenWithoutExc("add_op") && !checkTokenWithoutExc("mult_op") && !checkTokenWithoutExc("exp_op")) {
-			std::cout << "Success: identBoolean\n\n";
-			return true;
-		}
-		++activeLineOfSymbTable;
 	}
-
-	std::cout << "False: identBoolean\n\n";
-	return false;
 }
 
-bool Compiler::identArithm()
+void Compiler::opScope()
 {
-	std::cout << "\nStart: identArithm\n";
-	while (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float")) {
-		++activeLineOfSymbTable;
-		if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	++activeLineOfSymbTable;
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	{
+		if (ops != 0)
 		{
-			std::cout << "Success: identArithm\n\n";
-			return true;
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
 		}
-		if (!checkTokenWithoutExc("add_op") && !checkTokenWithoutExc("mult_op") && !checkTokenWithoutExc("exp_op")) {
-			std::cout << "Success: identArithm\n\n";
-			return true;
-		}
-		++activeLineOfSymbTable;
+		std::cout << "\nSuccess: identArithm\n\n";
 	}
-		
-	std::cout << "\nFalse: identArithm\n\n";
-	return false;
+	else if (checkTokenWithoutExc("add_op")) {
+		assExp();
+	}
+	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		identExp();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
+	{
+		++ops;
+		opScope();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", ")"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else if (checkTokenWithoutExc("rel_op"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else {
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+	}
 }
+
+void Compiler::clScope()
+{
+	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	++activeLineOfSymbTable;
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	{
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+		std::cout << "\nSuccess: identArithm\n\n";
+	}
+	else if (checkTokenWithoutExc("add_op") || checkTokenWithoutExc("mult_op") || checkTokenWithoutExc("exp_op")) {
+		assExp();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", ")"))
+	{
+		if (ops > 0) {
+			--ops;
+			clScope();
+		}
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else if (checkTokenWithoutExc("rel_op"))
+	{
+		relExp();
+	}
+	else {
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+	}
+}
+
+void Compiler::relExp()
+{
+	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	++activeLineOfSymbTable;
+	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
+	{
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+		std::cout << "\nSuccess: identArithm\n\n";
+	}
+	else if (checkTokenWithoutExc("add_op")) {
+		assExp();
+	}
+	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		identExp();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
+	{
+		++ops;
+		opScope();
+	}
+	else if (checkTokenAndValueWithoutExp("brackets_op", ")"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else if (checkTokenWithoutExc("rel_op"))
+	{
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nUnexpected: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+		throw std::runtime_error(error);
+	}
+	else {
+		if (ops != 0)
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nDiffernt number of ( and ): " + std::to_string(ops);
+			throw std::runtime_error(error);
+		}
+	}
+}
+
 
 void Compiler::identIfExp()
 {
+	
 	if (checkValueWithoutExc("if_op", "if") || checkValueWithoutExc("if_op", "elseif")) {
+		std::cout << "\nStart If expression\n";
+
 		checkTokenAndValue("brackets_op", "(");
-		++activeLineOfSymbTable;
-		identBoolean();
+		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
+		identExpresion();
 		if (checkTokenWithoutExc("rel_op"))
 		{
 			++activeLineOfSymbTable;
-			identBoolean();
-			
+			identExpresion();
+
 		}
 		--activeLineOfSymbTable;
 		checkTokenAndValue("brackets_op", ")");
+		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
 	if (checkValueWithoutExc("if_op", "else"))
 	{
+		std::cout << "\nStart else expression\n";
 		++activeLineOfSymbTable;
 	}
 	if (checkValueWithoutExc("block_op", "{")) {
+		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 		identRecParingList();
+
 		--activeLineOfSymbTable;
 		checkTokenAndValue("block_op", "}");
+		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
 }
@@ -592,7 +802,6 @@ void Compiler::identIfExp()
 void Compiler::identKeyWExp()
 {
 	/*
-		{"keyword","readline"},
 		{"keyword","cat"},
 		{"keyword","for"},
 		{"keyword","in"},

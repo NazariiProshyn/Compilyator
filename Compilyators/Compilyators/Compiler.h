@@ -41,6 +41,7 @@ private:
 	void relExp();
 	void identIfExp();
 	void identKeyWExp();
+	void identFor();
 	int ops{ 0 };
 };
 

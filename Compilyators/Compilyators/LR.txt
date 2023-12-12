@@ -33,8 +33,19 @@ elseif(x+y > 2*x) {
     if(x > z ) { 
       r7 <- 3^3+5
     }
-
+cat(y)
   }
-
+break
+next
 }
+
+
+for(y in x/5 +z : bla) {
+x <- 5
+for(y in (x/5 +z) : b) {
+cat(x)
+cat(x, y, z)
+}
+}
+
 

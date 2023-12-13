@@ -434,7 +434,7 @@ void Compiler::identRecParingList()
 	{
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
-			std::cout << "Recursiv Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			std::cout << "\nRecursiv Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
 
@@ -474,7 +474,7 @@ void Compiler::identRecParingList()
 
 void Compiler::identExpresion()
 {
-	std::cout << "\nStart identifacation expression\n";
+	std::cout << "\n\tStart identifacation expression\n";
 	++activeLineOfSymbTable;
 	if (checkTokenWithoutExc("add_op")) {
 		assExp();
@@ -488,7 +488,7 @@ void Compiler::identExpresion()
 		opScope();
 	}
 	else if (checkTokenAndValueWithoutExp("keyword", "readline")) {
-		std::cout << "\nCheck keyword: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+		std::cout << "\n\tCheck keyword: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 		++activeLineOfSymbTable;
 	}
 	else
@@ -505,7 +505,7 @@ void Compiler::identExpresion()
 
 void Compiler::identExp()
 {
-	std::cout << "\nCheck ident or value: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	std::cout << "\n\t\tCheck ident or value: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
 	{
@@ -550,7 +550,7 @@ void Compiler::identExp()
 
 void Compiler::assExp()
 {
-	std::cout << "\nCheck operators: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	std::cout << "\n\t\tCheck operators: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
 	{
@@ -604,7 +604,7 @@ void Compiler::assExp()
 
 void Compiler::opScope()
 {
-	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	std::cout << "\n\t\tCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
 	{
@@ -655,7 +655,7 @@ void Compiler::opScope()
 
 void Compiler::clScope()
 {
-	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	std::cout << "\n\t\tCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
 	{
@@ -702,7 +702,7 @@ void Compiler::clScope()
 
 void Compiler::relExp()
 {
-	std::cout << "\nCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
+	std::cout << "\n\t\tCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
 	{
@@ -756,10 +756,10 @@ void Compiler::identIfExp()
 {
 	
 	if (checkValueWithoutExc("if_op", "if") || checkValueWithoutExc("if_op", "elseif")) {
-		std::cout << "\nStart If expression\n";
+		std::cout << "\n\tStart If expression\n";
 
 		checkTokenAndValue("brackets_op", "(");
-		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		identExpresion();
 		if (checkTokenWithoutExc("rel_op"))
@@ -770,24 +770,24 @@ void Compiler::identIfExp()
 		}
 		--activeLineOfSymbTable;
 		checkTokenAndValue("brackets_op", ")");
-		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
 	if (checkValueWithoutExc("if_op", "else"))
 	{
-		std::cout << "\nStart else expression\n";
+		std::cout << "\n\tStart else expression\n";
 		++activeLineOfSymbTable;
 	}
 	if (checkValueWithoutExc("block_op", "{")) {
-		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 		identRecParingList();
 
 		--activeLineOfSymbTable;
 		checkTokenAndValue("block_op", "}");
-		std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
@@ -796,19 +796,19 @@ void Compiler::identIfExp()
 void Compiler::identKeyWExp()
 {
 	if (checkValueWithoutExc("keyword", "break")) {
-		std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
 	else if (checkValueWithoutExc("keyword", "next")) {
-		std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
 	else if (checkValueWithoutExc("keyword", "cat")) {
 		
 		bool temp = true;
-		std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		checkTokenAndValue("brackets_op", "(");
 
@@ -817,12 +817,12 @@ void Compiler::identKeyWExp()
 
 			
 			checkToken("ident");
-			std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			++activeLineOfSymbTable;
 			temp = checkTokenAndValueWithoutExp("punct", ",");
 			if (temp) {
-				std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+				std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 					<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			}
 
@@ -831,7 +831,7 @@ void Compiler::identKeyWExp()
 		--activeLineOfSymbTable;
 		
 		checkTokenAndValue("brackets_op", ")");
-		std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+		std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 
 		++activeLineOfSymbTable;
@@ -844,28 +844,28 @@ void Compiler::identKeyWExp()
 void Compiler::identFor()
 {
 	
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	checkTokenAndValue("brackets_op", "(");
 
 
 
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	checkToken("ident");
 
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 
 	checkTokenAndValue("keyword", "in");
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 
 	identExpresion();
 
 	--activeLineOfSymbTable;
 	checkTokenAndValue("punct", ":");
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 
 	
@@ -874,20 +874,20 @@ void Compiler::identFor()
 	--activeLineOfSymbTable;
 
 	checkTokenAndValue("brackets_op", ")");
-	std::cout << "\nKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	
 	++activeLineOfSymbTable;
 
 		if (checkValueWithoutExc("block_op", "{")) {
-			std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			++activeLineOfSymbTable;
 			identRecParingList();
 
 			--activeLineOfSymbTable;
 			checkTokenAndValue("block_op", "}");
-			std::cout << "\nIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+			std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			++activeLineOfSymbTable;
 		}

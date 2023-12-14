@@ -397,6 +397,7 @@ void Compiler::identParingList()
 	{
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
+			afterScope.clear();
 			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
@@ -413,6 +414,7 @@ void Compiler::identParingList()
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "keyword")
 		{
+			afterScope.clear();
 			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			identKeyWExp();
@@ -434,6 +436,7 @@ void Compiler::identRecParingList()
 	{
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
+			afterScope.clear();
 			std::cout << "\nRecursiv Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
@@ -449,6 +452,7 @@ void Compiler::identRecParingList()
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "keyword")
 		{
+			afterScope.clear();
 			std::cout << "\nRecursiv Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			identKeyWExp();
@@ -756,6 +760,30 @@ void Compiler::identIfExp()
 {
 	
 	if (checkValueWithoutExc("if_op", "if") || checkValueWithoutExc("if_op", "elseif")) {
+		if (checkValueWithoutExc("if_op", "if")) {
+			activeScope.push_back("if");
+		}
+		else
+		{
+			if (afterScope.size() == 0) {
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nElseIf can by only after If statement";
+				throw std::runtime_error(error);
+			}
+			if (afterScope[afterScope.size() - 1] == "if") {
+				activeScope.push_back("elseif");
+			}
+			else
+			{
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nElseIf can by only after If statement";
+				throw std::runtime_error(error);
+			}
+			
+		}
+
 		std::cout << "\n\tStart If expression\n";
 
 		checkTokenAndValue("brackets_op", "(");
@@ -776,8 +804,27 @@ void Compiler::identIfExp()
 	}
 	if (checkValueWithoutExc("if_op", "else"))
 	{
-		std::cout << "\n\tStart else expression\n";
-		++activeLineOfSymbTable;
+		if (afterScope.size() == 0) {
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nElse can by only after If ot elseIf statements";
+			throw std::runtime_error(error);
+		}
+		if (afterScope[afterScope.size() - 1] == "if" || afterScope[afterScope.size() - 1] == "elseif") {
+			activeScope.push_back("else");
+			std::cout << "\n\tStart else expression\n";
+			++activeLineOfSymbTable;
+		}
+		else
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nElse can by only after If ot elseIf statements";
+			throw std::runtime_error(error);
+		}
+
+
+
 	}
 	if (checkValueWithoutExc("block_op", "{")) {
 		std::cout << "\n\t\tIfExpression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
@@ -791,19 +838,41 @@ void Compiler::identIfExp()
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
+	
+	afterScope.push_back(activeScope[activeScope.size() - 1]);
+	activeScope.pop_back();
 }
 
 void Compiler::identKeyWExp()
 {
 	if (checkValueWithoutExc("keyword", "break")) {
-		std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
-		++activeLineOfSymbTable;
+		if (checkElementInVector(true, "for")) {
+			std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
+			++activeLineOfSymbTable;
+		}
+		else
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nBreak can by only in FOR cycle";
+			throw std::runtime_error(error);
+		}
+		
 	}
 	else if (checkValueWithoutExc("keyword", "next")) {
-		std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
-			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
-		++activeLineOfSymbTable;
+		if (checkElementInVector(true, "for")) {
+			std::cout << "\n\t\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
+				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
+			++activeLineOfSymbTable;
+		}
+		else
+		{
+			std::string error = "In line: ";
+			error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+			error += "\nNext can by only in FOR cycle";
+			throw std::runtime_error(error);
+		}
 	}
 	else if (checkValueWithoutExc("keyword", "cat")) {
 		
@@ -843,7 +912,7 @@ void Compiler::identKeyWExp()
 
 void Compiler::identFor()
 {
-	
+	activeScope.push_back("for");
 	std::cout << "\n\tKeyword expression. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 		<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 	checkTokenAndValue("brackets_op", "(");
@@ -891,7 +960,39 @@ void Compiler::identFor()
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			++activeLineOfSymbTable;
 		}
-	
+		activeScope.pop_back();
+		
 
+}
 
+bool Compiler::checkElementInVector(bool info, std::string elem)
+{
+	if (info) {
+		
+		if (activeScope.size() == 0) {
+			return false;
+		}
+		
+		for (size_t j = 0; j < activeScope.size(); ++j)
+		{
+			
+			if (elem == activeScope[j]) {
+				
+				return true;
+			}
+		}
+	}
+	else {
+		if (afterScope.size() == 0) {
+			return false;
+		}
+		for (size_t i = 0; i < afterScope.size() - 1; ++i)
+		{
+			if (elem == afterScope[i]) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

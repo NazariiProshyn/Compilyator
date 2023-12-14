@@ -12,7 +12,7 @@ t <- 0.0
 # коментар
 for (x in 1:9) {
 if (x==2) {
- continue
+ 
 }
 elseif (x<5) {
 	cat(r2)
@@ -36,6 +36,8 @@ elseif (5.1 >5) {
 }
 cat(t, x)
 }
-if (5>=5.0){
+if (5>=5.0) {
 		if (5<=5.0) {
 #comment
+}
+}

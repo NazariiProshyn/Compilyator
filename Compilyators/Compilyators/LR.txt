@@ -3,6 +3,8 @@ x <- -2*2*3^4/5
 y <-   (7/ 2)
 z <- - (6 % 4) 
 
+
+
 y <- x+y-z
 r <- 3^3^5
 x2 <- 2.5*2.5*3.5^4/5.5
@@ -10,43 +12,25 @@ y2 <- 5.5/2
 z2 <- 6.5 % 4
 y2 <- x+y-z
 r2 <- 3^3+5
-y <- 5+1/
-(x+t+t-g)
+y <- 5+1/ (x+t+t-g)
 x <- - ( -x+ (y-e) ) + ( a )
 
-if( ( -x+ (y-e) ) + ( a ) ) {
-y3 <- TRUE
-}
 x12 <- readline
+for(x in y:b) {
+if(x > y) { }
 
-elseif(TRUE > FALSE ) { }
-x3 <- 5+x>=y+3
+else{ }
 
-x <-  x + (y + b) + z
-
-if(x > z ) { 
-r7 <- 3^3+5
-}
-
-elseif(x+y > 2*x) { 
-
-  else{ 
-    if(x > z ) { 
-      r7 <- 3^3+5
-    }
-cat(y)
-  }
+for(y in f:y) {
+next
+break}
 break
 next
 }
 
 
-for(y in x/5 +z : bla) {
-x <- 5
-for(y in (x/5 +z) : b) {
-cat(x)
-cat(x, y, z)
-}
-}
+
+y  <- 5
+
 
 

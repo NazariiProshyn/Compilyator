@@ -43,5 +43,10 @@ private:
 	void identKeyWExp();
 	void identFor();
 	int ops{ 0 };
+	std::vector<std::string> activeScope;
+	std::vector<std::string> afterScope;
+
+
+	bool checkElementInVector(bool info, std::string elem);
 };
 

@@ -28,7 +28,7 @@ break
 		if (FALSE) {
 	t<-999 
 }
-elseif (FALSE > TRUE) {
+elseif (x > 2) {
 	t <- -999
 }
 elseif (5.1 >5) {

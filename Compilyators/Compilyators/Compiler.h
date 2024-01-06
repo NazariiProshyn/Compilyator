@@ -45,8 +45,12 @@ private:
 	int ops{ 0 };
 	std::vector<std::string> activeScope;
 	std::vector<std::string> afterScope;
+	std::vector<std::string> activeIdents;
+	std::string activeIdent;
 
 
 	bool checkElementInVector(bool info, std::string elem);
+	bool checkIdentsInVector(std::string elem);
+	bool isPoriv = false;
 };
 

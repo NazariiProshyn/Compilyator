@@ -398,12 +398,15 @@ void Compiler::identParingList()
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
 			afterScope.clear();
+			activeIdent = tables.tableOfSymb[activeLineOfSymbTable].value;
+			
 			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
 			std::cout << "\nParsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			identExpresion();
+			activeIdents.push_back(activeIdent);
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "if_op")
 		{
@@ -437,11 +440,15 @@ void Compiler::identRecParingList()
 		if (tables.tableOfSymb[activeLineOfSymbTable].token == "ident")
 		{
 			afterScope.clear();
+			activeIdent = tables.tableOfSymb[activeLineOfSymbTable].value;
+			
+			
 			std::cout << "\nRecursiv Parsing list. Line: " << tables.tableOfSymb[activeLineOfSymbTable].textLine << "("
 				<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 			checkTokenAndValue("assign_op", "<-");
 
 			identExpresion();
+			activeIdents.push_back(activeIdent);
 		}
 		else if (tables.tableOfSymb[activeLineOfSymbTable].token == "if_op")
 		{
@@ -484,6 +491,19 @@ void Compiler::identExpresion()
 		assExp();
 	}
 	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		if (checkTokenWithoutExc("ident")) {
+			if (checkIdentsInVector(tables.tableOfSymb[activeLineOfSymbTable].value)) {
+				
+			}
+			else
+			{
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nUndefined identificator: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+				throw std::runtime_error(error);
+			}
+			
+		}
 		identExp();
 	}
 	else if(checkTokenAndValueWithoutExp("brackets_op", "("))
@@ -574,6 +594,19 @@ void Compiler::assExp()
 		throw std::runtime_error(error);
 	}
 	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float")) {
+		if (checkTokenWithoutExc("ident")) {
+			if (checkIdentsInVector(tables.tableOfSymb[activeLineOfSymbTable].value)) {
+
+			}
+			else
+			{
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nUndefined identificator: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+				throw std::runtime_error(error);
+			}
+
+		}
 		identExp();
 	}
 	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
@@ -625,6 +658,19 @@ void Compiler::opScope()
 		assExp();
 	}
 	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		if (checkTokenWithoutExc("ident")) {
+			if (checkIdentsInVector(tables.tableOfSymb[activeLineOfSymbTable].value)) {
+
+			}
+			else
+			{
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nUndefined identificator: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+				throw std::runtime_error(error);
+			}
+
+		}
 		identExp();
 	}
 	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
@@ -706,6 +752,7 @@ void Compiler::clScope()
 
 void Compiler::relExp()
 {
+	isPoriv = true;
 	std::cout << "\n\t\tCheck brackets_op: (" << tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value << ")";
 	++activeLineOfSymbTable;
 	if (activeLineOfSymbTable >= tables.tableOfSymb.size())
@@ -723,6 +770,19 @@ void Compiler::relExp()
 		assExp();
 	}
 	else if (checkTokenWithoutExc("ident") || checkTokenWithoutExc("int") || checkTokenWithoutExc("float") || checkTokenWithoutExc("boolval")) {
+		if (checkTokenWithoutExc("ident")) {
+			if (checkIdentsInVector(tables.tableOfSymb[activeLineOfSymbTable].value)) {
+
+			}
+			else
+			{
+				std::string error = "In line: ";
+				error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+				error += "\nUndefined identificator: (" + tables.tableOfSymb[activeLineOfSymbTable].token + ", " + tables.tableOfSymb[activeLineOfSymbTable].value + ")";
+				throw std::runtime_error(error);
+			}
+
+		}
 		identExp();
 	}
 	else if (checkTokenAndValueWithoutExp("brackets_op", "("))
@@ -760,6 +820,7 @@ void Compiler::identIfExp()
 {
 	
 	if (checkValueWithoutExc("if_op", "if") || checkValueWithoutExc("if_op", "elseif")) {
+		isPoriv = false;
 		if (checkValueWithoutExc("if_op", "if")) {
 			activeScope.push_back("if");
 		}
@@ -771,7 +832,7 @@ void Compiler::identIfExp()
 				error += "\nElseIf can by only after If statement";
 				throw std::runtime_error(error);
 			}
-			if (afterScope[afterScope.size() - 1] == "if") {
+			if (afterScope[afterScope.size() - 1] == "if" || afterScope[afterScope.size() - 1] == "elseif") {
 				activeScope.push_back("elseif");
 			}
 			else
@@ -838,7 +899,12 @@ void Compiler::identIfExp()
 			<< tables.tableOfSymb[activeLineOfSymbTable].token << ", " << tables.tableOfSymb[activeLineOfSymbTable].value << ")\n";
 		++activeLineOfSymbTable;
 	}
-	
+	if (!isPoriv) {
+		std::string error = "In line: ";
+		error += std::to_string(tables.tableOfSymb[activeLineOfSymbTable].textLine);
+		error += "\nMust be rel_op in if_op statement";
+		throw std::runtime_error(error);
+	}
 	afterScope.push_back(activeScope[activeScope.size() - 1]);
 	activeScope.pop_back();
 }
@@ -994,5 +1060,22 @@ bool Compiler::checkElementInVector(bool info, std::string elem)
 		}
 	}
 
+	return false;
+}
+
+bool Compiler::checkIdentsInVector( std::string elem)
+{
+	if (activeIdents.size() == 0) {
+		return false;
+	}
+
+	for (size_t j = 0; j < activeIdents.size(); ++j)
+	{
+
+		if (elem == activeIdents[j]) {
+
+			return true;
+		}
+	}
 	return false;
 }

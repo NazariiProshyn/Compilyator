@@ -35,7 +35,6 @@
 	};
 
 
-
 class Tables
 {
 public:
